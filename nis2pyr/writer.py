@@ -12,7 +12,7 @@ from reader import is_rgb_image
 def write_pyramidal_ome_tiff(image,     # TODO add type
                              nd2_metadata,  # TODO add type
                              pyramid_filename: str,
-                             compression: Optional[str]='zlib',  # TODO: check which compression is used by bioformats bfconvert; is it reported by tiffcomment/showinfo? Is zlib the LZW of bfconvert?
+                             compression: Optional[str]=None, 
                              tile_size: int=256,
                              max_levels: int=6) -> None:
     """xxxx
