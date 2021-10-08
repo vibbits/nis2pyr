@@ -16,21 +16,20 @@ from writer import write_pyramidal_ome_tiff
 #   bfconvert.bat -no-upgrade -bigtiff -pyramid-scale 2 -pyramid-resolutions 6 -noflat -tilex 256 -tiley 256 foo.nd2 pyramidal.ome.tif
 #
 # Inspecting the OME TIFF file:
-#   showinf.abt pyramidal.ome.tif
+#   showinf.bat pyramidal.ome.tif
 #
 # Inspecting OME XML atrributes in an OME TIFF file: 
 #   tiffcomment.bat pyramidal.ome.tif
 #
 
-# TODO: use logger instead of hard-coded print statement
+# TODO: use logger instead of hard-coded print statements
 # TODO: provide command line flag with logging level
 
 VERSION = '0.3.1'
 
 
 def _parse_args():
-    parser = argparse.ArgumentParser()
-    # TODO: add info about what this tool does
+    parser = argparse.ArgumentParser(description="Convert Nikon .nd2 image files to tiled pyramidal OME TIFF files.")
     parser.add_argument('--version', action='version', version=f'{VERSION}')
     parser.add_argument('nd2_filename', type=str, help="full filename of the input ND2 file")
     parser.add_argument('pyramid_filename', type=str, help="full filename of resulting pyramidal OME TIFF file; typically ends in .ome.tif")
