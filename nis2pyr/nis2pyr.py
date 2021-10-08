@@ -25,7 +25,7 @@ from writer import write_pyramidal_ome_tiff
 # TODO: use logger instead of hard-coded print statements
 # TODO: provide command line flag with logging level
 
-VERSION = '0.3.1'
+VERSION = '0.3.2'
 
 
 def _parse_args():
@@ -33,20 +33,22 @@ def _parse_args():
     parser.add_argument('--version', action='version', version=f'{VERSION}')
     parser.add_argument('nd2_filename', type=str, help="full filename of the input ND2 file")
     parser.add_argument('pyramid_filename', type=str, help="full filename of resulting pyramidal OME TIFF file; typically ends in .ome.tif")
-    # TODO: add tilesize
-    # TODO: add pyramid levels
+    parser.add_argument('--tile-size', type=int, default=256, help='width in pixels of the tiles in the pyramidal OME TIFF; the tiles are square; tile size must be a multiple of 16')
+    parser.add_argument('--pyramid-levels', type=int, default=6, help='the maximum number of resolution levels in the pyramidal OME TIFF, including the full resolution image; subsequent pyramid levels are downsampled by a factor 2')
     # TODO: add compression
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = _parse_args()
+    print(args)
     t1 = time.time()
     image, metadata = read_nd2(args.nd2_filename)
     write_pyramidal_ome_tiff(image, 
                              metadata, 
                              args.pyramid_filename, 
-                             compression=None, 
-                             max_levels=6)
+                             compression='None',
+                             tile_size=args.tile_size,
+                             max_levels=args.pyramid_levels)
     t2 = time.time()
     print(f'Image conversion took {t2-t1:.1f} seconds.')
