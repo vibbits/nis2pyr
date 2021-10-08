@@ -3,15 +3,6 @@ import time
 from reader import read_nd2
 from writer import write_pyramidal_ome_tiff
 
-# TODO: make environment.yaml / requirements.txt
-# Development environment
-# conda create -n nis python=3.8
-# conda activate nis
-# pip install pims_nd2
-# pip install opencv-python
-# pip install imagecodecs
-# pip install tifffile
-# pip install ome_types
 
 # Inspecting the original .nd2 files:
 #   NIS-Elements Viewer
@@ -34,7 +25,7 @@ from writer import write_pyramidal_ome_tiff
 # TODO: use logger instead of hard-coded print statement
 # TODO: provide command line flag with logging level
 
-VERSION = '0.3.0'
+VERSION = '0.3.1'
 
 
 def _parse_args():
