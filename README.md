@@ -2,6 +2,10 @@
 
 The `nis2pyr` utility converts [Nikon](https://www.microscope.healthcare.nikon.com/products/software/nis-elements) .nd2 files to tiled pyramidal [OME](https://www.openmicroscopy.org/) TIFF files. These TIFF files can then be opened in [QuPath](https://qupath.github.io/) for interactive viewing.
 
+## System requirements
+
+The instructions below assume Windows 10, but they should work with only minor changes on other platforms such as Linux.
+
 ## Setting up a development environment
 
 First get the source code:
@@ -15,18 +19,48 @@ conda env create -f environment.yml
 conda activate nis2pyr
 ```
 
-## Running nis2pyr
+## Packaging nis2pyr
 
-To generate an uncompressed pyramidal file with the default options, first move to the source folder of your cloned nis2pyr git repo. Then run `nis2pyr`, specifying the .nd2 input image file, and the name of the pyramidal OME TIFF to which it needs to be converted:
+### Packaging into a stand-alone directory
+
+The `nis2pyr.py` program requires a Python environment to execute. This complicates deploying it on non-development machines where Python is not installed. It is however possible to bundle `nis2pyr.py` and all its dependencies into a stand-alone directory, which contains a `nis2pyr.exe` executable. This can be accomplished with [PyInstaller](https://pyinstaller.readthedocs.io/en/stable/index.html). 
+
+First install pyinstaller:
+```
+pip install pyinstaller
+```
+
+Then `cd` into the directory which contains the `nis2pyr.py` file and run pyinstaller:
+```
+pyinstaller --collect-all pims_nd2 --collect-all ome_types --collect-all xmlschema nis2pyr.py
+```
+
+The `--collect-all` options are needed to give `pyinstaller` a hand finding modules needed by nis2pyr.
+
+The dist\nis2pyr directory is now self-contained and holds a `nis2pyr.exe` which can be executed on the command line outside a Python development environment.
+
+### Packaging into a stand-alone executable
+
+Instead of bundling nis2pyr in a directory containing the executable as well as all its dependencies, it is also possible to bundle everything in a single executable which is basically a self-extracting archive holding the same files. This is done by passing the `--onefile` option to `pyinstaller`:
 
 ```
-python nis2pyr.py input.nd2 pyramid.ome.tif
+pyinstaller --onefile --collect-all pims_nd2 --collect-all ome_types --collect-all xmlschema nis2pyr.py
+```
+
+The resulting single file `nis2pyr.exe` is now even easier to deploy. However, starting it will be a bit slower because behind the scenes its contents are first unpacked into a temporary folder every time nis2pyr is run.
+
+## Running nis2pyr
+
+To generate an uncompressed pyramidal file with the default options, run `nis2pyr.exe` specifying the .nd2 input image file, and the name of the pyramidal OME TIFF to which it needs to be converted:
+
+```
+nis2pyr.exe input.nd2 pyramid.ome.tif
 ```
 
 It is also possible to specify the compression algorithm, number of pyramid levels and the tile size of the output pyramidal OME TIFF.
 
 ```
-usage: nis2pyr.py [-h] [--version] [--compression COMPRESSION] [--pyramid-levels PYRAMID_LEVELS] [--tile-size TILE_SIZE] nd2_filename pyramid_filename
+usage: nis2pyr [-h] [--version] [--compression COMPRESSION] [--pyramid-levels PYRAMID_LEVELS] [--tile-size TILE_SIZE] nd2_filename pyramid_filename
 
 Convert Nikon .nd2 image files to tiled pyramidal OME TIFF files.
 
