@@ -23,7 +23,7 @@ conda activate nis2pyr
 
 ### Packaging into a stand-alone directory
 
-The `nis2pyr.py` program requires a Python environment to execute. This complicates deploying it on non-development machines where Python is not installed. It is however possible to bundle `nis2pyr.py` and all its dependencies into a stand-alone directory, which contains a `nis2pyr.exe` executable. This can be accomplished with [PyInstaller](https://pyinstaller.readthedocs.io/en/stable/index.html). 
+The `nis2pyr.py` program requires a Python environment to execute. This complicates deploying it on non-development machines where Python is not installed. It is however possible to bundle `nis2pyr.py` with all its dependencies and a Python interpreter into a stand-alone directory, which contains a `nis2pyr.exe` executable that runs the program. This can be accomplished with [PyInstaller](https://pyinstaller.readthedocs.io/en/stable/index.html). 
 
 First install pyinstaller:
 ```
