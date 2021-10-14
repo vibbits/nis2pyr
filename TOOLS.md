@@ -20,19 +20,19 @@ Here are a few typical use cases:
 
 ### Converting ND2 to tiled pyramidal OME TIFF with bfconvert
 
-```
+```text
 set BF_MAX_MEM=4g
 bfconvert.bat -no-upgrade -bigtiff -pyramid-scale 2 -pyramid-resolutions 6 -noflat -tilex 256 -tiley 256 input_image.nd2 pyramidal.ome.tif
 ```
 
 ### Inspecting the structure of an OME TIFF file
 
-```
+```text
 showinf.bat pyramidal.ome.tif
 ```
 
 ### Inspecting the OME XML atrributes in an OME TIFF file
 
-``` 
+```text
 tiffcomment.bat pyramidal.ome.tif
 ```

@@ -9,12 +9,14 @@ The instructions below assume Windows 10, but they should work with only minor c
 ## Setting up a development environment
 
 First get the source code:
-```
+
+```text
 git clone https://github.com/vibbits/nis2pyr.git
 ```
 
 Then create a Conda environment:
-```
+
+```text
 conda env create -f environment.yml
 conda activate nis2pyr
 ```
@@ -26,12 +28,14 @@ conda activate nis2pyr
 The `nis2pyr.py` program requires a Python environment to execute. This complicates deploying it on non-development machines where Python is not installed. It is however possible to bundle `nis2pyr.py` with all its dependencies and a Python interpreter into a stand-alone directory, which contains a `nis2pyr.exe` executable that runs the program. This can be accomplished with [PyInstaller](https://pyinstaller.readthedocs.io/en/stable/index.html). 
 
 First install pyinstaller:
-```
+
+```text
 pip install pyinstaller
 ```
 
 Then `cd` into the directory which contains the `nis2pyr.py` file and run pyinstaller:
-```
+
+```text
 pyinstaller --collect-all pims_nd2 --collect-all ome_types --collect-all xmlschema nis2pyr.py
 ```
 
@@ -43,7 +47,7 @@ The dist\nis2pyr directory is now self-contained and holds a `nis2pyr.exe` which
 
 Instead of bundling nis2pyr in a directory containing the executable as well as all its dependencies, it is also possible to bundle everything in a single executable which is basically a self-extracting archive holding the same files. This is done by passing the `--onefile` option to `pyinstaller`:
 
-```
+```text
 pyinstaller --onefile --collect-all pims_nd2 --collect-all ome_types --collect-all xmlschema nis2pyr.py
 ```
 
@@ -53,13 +57,13 @@ The resulting single file `nis2pyr.exe` is now even easier to deploy. However, s
 
 To generate an uncompressed pyramidal file with the default options, run `nis2pyr.exe` specifying the .nd2 input image file, and the name of the pyramidal OME TIFF to which it needs to be converted:
 
-```
+```text
 nis2pyr.exe input.nd2 pyramid.ome.tif
 ```
 
 It is also possible to specify the compression algorithm, number of pyramid levels and the tile size of the output pyramidal OME TIFF.
 
-```
+```text
 usage: nis2pyr [-h] [--version] [--compression COMPRESSION] [--pyramid-levels PYRAMID_LEVELS] [--tile-size TILE_SIZE] nd2_filename pyramid_filename
 
 Convert Nikon .nd2 image files to tiled pyramidal OME TIFF files.
