@@ -84,3 +84,11 @@ optional arguments:
   --tile-size TILE_SIZE
                         width in pixels of the tiles in the pyramidal OME TIFF; the tiles are square; tile size must be a multiple of 16 (default: 256)
 ```
+
+## Limitations
+
+Known limitations of the current version of `nis2py`:
+
+- ND2 files with multiple z-planes are not supported.
+- ND2 files with multiple timepoints are not supported.
+- ND2 metadata is lost, except for pixel size and channel names and colors.
