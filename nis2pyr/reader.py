@@ -24,7 +24,6 @@ def read_nd2file(nd2file: nd2.ND2File) -> np.ndarray:
         # We want the channel color to be the last dimension,
         # so we can pass the data easily to tifffile.
         image = image.transpose((1, 2, 0))
-        print(image.shape)
 
     # Reorder BGR channels to RGB
     if nd2file.is_rgb:
