@@ -1,7 +1,0 @@
-__pycache__/
-*.pyc
-
-# PyInstaller output
-dist
-build
-nis2pyr.spec

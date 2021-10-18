@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+
+# Distribution and packaging
+dist
+build
+*.egg-info/
+
+# PyInstaller
+nis2pyr.spec
+
+# Editor
+.vscode/*
