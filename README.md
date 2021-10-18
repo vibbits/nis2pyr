@@ -8,7 +8,12 @@ The `nis2pyr` utility converts [Nikon](https://www.microscope.healthcare.nikon.c
 
 ## System Requirements
 
-The instructions below assume Windows 10, but they should work with only minor changes on other platforms such as Linux.
+nis2pyr was tested on these platforms:
+
+- Windows 10
+- Ubuntu 18.04
+
+It is however expected to run on a wider range of systems.
 
 ## Installation
 
@@ -18,7 +23,7 @@ Installation is straightforward:
 pip install nis2pyr
 ```
 
-This installs the nis2pyr Python package which provides a simple function to convert ND2 files to OME TIFF. It also installs the `nis2pyr` program to convert ND2 files to OME TIFF from the command line.
+This installs the nis2pyr Python package which provides an easy to use function to convert ND2 files to OME TIFF. It also installs the `nis2pyr` program to convert ND2 files to OME TIFF from the command line.
 
 ## Using nis2pyr in a Python program
 
