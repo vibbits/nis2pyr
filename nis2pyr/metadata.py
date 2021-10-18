@@ -10,7 +10,7 @@ from nd2.structures import Metadata
 Rgb = Tuple[int, int, int]
 
 
-def ome_set_channels_info(ome_filename: str, 
+def ome_set_channels_info(ome_filename: str,
                           nd2_channels_info: List[Tuple[str, Rgb]]) -> None:
     # Read existing OME tags from TIFF file.
     ome_xml = tifffile.tiffcomment(ome_filename)
@@ -21,7 +21,9 @@ def ome_set_channels_info(ome_filename: str,
     ome_num_channels = len(ome.images[0].pixels.channels)
 
     if nd2_num_channels != ome_num_channels:
-        print(f'Cannot update OME XML channel info due to a metadata conflict: the OME XML has {ome_num_channels} channels but the ND2 metadata has {nd2_num_channels}.')
+        print(f'Cannot update OME XML channel info due to a metadata '
+              f'conflict: the OME XML has {ome_num_channels} channels but '
+              f'the ND2 metadata has {nd2_num_channels}.')
         return
 
     # Update OME tags.
@@ -34,7 +36,7 @@ def ome_set_channels_info(ome_filename: str,
         channel.name = name
         channel.color = pydantic.color.Color(color)
         ome.images[0].pixels.channels[i] = channel
-    
+
     # Write back OME tags to the TIFF file.
     ome_xml = ome.to_xml()
     tifffile.tiffcomment(ome_filename, ome_xml)
@@ -43,11 +45,12 @@ def ome_set_channels_info(ome_filename: str,
 def get_nd2_channels_info(nd2file: ND2File) -> List[Tuple[str, Rgb]]:
     metadata = nd2file.metadata
     num_channels = metadata.contents.channelCount
-    return [_get_channel_info(metadata, channel) for channel in range(num_channels)]
+    return [_get_channel_info(metadata, channel)
+            for channel in range(num_channels)]
 
 
-def _get_channel_info(nd2_metadata: Metadata, 
-                      channel_index: int) -> Tuple[str, Rgb]:   
+def _get_channel_info(nd2_metadata: Metadata,
+                      channel_index: int) -> Tuple[str, Rgb]:
     channel = nd2_metadata.channels[channel_index].channel
     name = channel.name
     color = _parse_int_color(channel.colorRGB)
