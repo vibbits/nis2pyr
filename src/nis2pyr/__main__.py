@@ -1,3 +1,3 @@
-from .nis2pyr import main
+from nis2pyr.nis2pyr import main
 
 main()

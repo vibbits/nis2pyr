@@ -6,8 +6,8 @@ import tifffile  # https://github.com/cgohlke/tifffile
 
 from typing import Tuple, Optional
 
-from .metadata import get_nd2_channels_info, ome_set_channels_info
-from .reader import read_nd2file
+from nis2pyr.metadata import get_nd2_channels_info, ome_set_channels_info
+from nis2pyr.reader import read_nd2file
 
 
 def write_pyramidal_ome_tiff(nd2file: nd2.ND2File,

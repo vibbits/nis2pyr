@@ -1,8 +1,8 @@
 import argparse
 import sys
 import time
-from .convertor import convert_nd2_to_pyramidal_ome_tiff
-from . import __version__
+from nis2pyr.convertor import convert_nd2_to_pyramidal_ome_tiff
+from nis2pyr import __version__
 
 
 def _parse_args():

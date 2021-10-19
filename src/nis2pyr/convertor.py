@@ -1,6 +1,6 @@
 import nd2
 from typing import Optional
-from .writer import write_pyramidal_ome_tiff
+from nis2pyr.writer import write_pyramidal_ome_tiff
 
 
 def convert_nd2_to_pyramidal_ome_tiff(nd2_filename: str,
