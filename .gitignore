@@ -1,3 +1,4 @@
+# Python
 __pycache__/
 *.pyc
 
@@ -11,3 +12,8 @@ nis2pyr.spec
 
 # Editor
 .vscode/*
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
