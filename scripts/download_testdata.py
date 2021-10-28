@@ -1,9 +1,8 @@
+import argparse
 import os
-import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.request import urlopen
-
 import testdata
 
 
@@ -34,6 +33,17 @@ def main(output_folder: str) -> None:
                      testdata.URLS)
 
 
+def _parse_args():
+    parser = argparse.ArgumentParser(
+        description="Download ND2 test images")
+    parser.add_argument(
+        'output_folder',
+        type=str,
+        help='directory to save the test images in; the directory will be '
+             'created if it does not exist yet')
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
-    output_folder = sys.argv[1]
-    main(output_folder)
+    args = _parse_args()
+    main(args.output_folder)
