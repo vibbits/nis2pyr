@@ -26,7 +26,7 @@ def download_and_save(url: str, output_folder: str) -> None:
 
 
 def main(output_folder: str) -> None:
-    Path(output_folder).mkdir(exist_ok=True)
+    Path(output_folder).mkdir(parents=True, exist_ok=True)
     with ThreadPoolExecutor() as executor:
         print(f'Downloading test images to {output_folder}')
         executor.map(lambda url: download_and_save(url, output_folder),
