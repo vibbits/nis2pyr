@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    name: ${{ matrix.platform }} (Python ${{ matrix.python-version }})
+    name: ${{ matrix.platform }} + Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.platform }}
     strategy:
       fail-fast: false
@@ -28,3 +28,6 @@ jobs:
           
       - name: Download test images
         run: python scripts/download_testimages.py tests/data
+
+      - name: Test
+        run: pytest -v -k test_reader --input-dir=tests/data
