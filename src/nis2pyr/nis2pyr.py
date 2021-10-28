@@ -1,6 +1,9 @@
 import argparse
+import os
 import sys
 import time
+from pathlib import Path
+from typing import Optional
 from nis2pyr.convertor import convert_nd2_to_pyramidal_ome_tiff
 from nis2pyr import __version__
 
@@ -20,9 +23,9 @@ def _parse_args():
         '--compression',
         type=str,
         default=None,
-        help="the algorithm used for compressing the image data; if this flag "
-             "is not specified the data will not be compressed; currently "
-             "'zlib' is the only useful algorithm, 'lzw' is not supported")
+        help="the algorithm used for compressing the image data; currently "
+             "'zlib' is the only supported compression algorithm "
+             "(default: no compression)")
 
     parser.add_argument(
         '--pyramid-levels',
@@ -49,10 +52,26 @@ def _parse_args():
     parser.add_argument(
         'pyramid_filename',
         type=str,
-        help="full filename of resulting pyramidal OME TIFF file; "
-             "typically ends in .ome.tif")
+        nargs='?',
+        help="full filename of the resulting pyramidal OME TIFF file; "
+             "if no pyramid filename is provided the pyramidal OME TIFF will "
+             "be written to the same directory as the original ND2 and with "
+             "the same filename but with an .ome.tif extension")
 
     return parser.parse_args()
+
+
+def _get_pyramid_filename(nd2_filename: str,
+                          pyramid_filename: Optional[str]) -> str:
+    if pyramid_filename is not None:
+        return pyramid_filename
+    else:
+        # If we have no pyramid filename, then we use the same directory
+        # and the same filename of the ND2 file, but with .ome.tiff
+        # as extension instead of .nd2.
+        dirname = os.path.dirname(nd2_filename)
+        filename = os.path.basename(Path(nd2_filename).with_suffix('.ome.tif'))
+        return os.path.join(dirname, filename)
 
 
 def main() -> int:
@@ -60,9 +79,14 @@ def main() -> int:
 
     print(f'nis2pyr v{__version__}')
 
+    # The pyramid filename is optional. Determine a reasonable default
+    # filename if it's missing.
+    pyramid_filename = _get_pyramid_filename(args.nd2_filename,
+                                             args.pyramid_filename)
+
     t1 = time.time()
     convert_nd2_to_pyramidal_ome_tiff(args.nd2_filename,
-                                      args.pyramid_filename,
+                                      pyramid_filename,
                                       args.compression,
                                       args.tile_size,
                                       args.pyramid_levels)
