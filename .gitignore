@@ -17,3 +17,6 @@ nis2pyr.spec
 htmlcov/
 .coverage
 .coverage.*
+
+# Private
+archive
