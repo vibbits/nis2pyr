@@ -30,4 +30,4 @@ jobs:
         run: python scripts/download_testimages.py tests/data
 
       - name: Test
-        run: pytest -v -k test_reader --input-dir=tests/data
+        run: pytest -v --input-dir=tests/data --output-dir=tests/data
