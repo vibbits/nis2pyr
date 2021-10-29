@@ -10,6 +10,16 @@ def any_nd2(request):
     return request.param
 
 
+@pytest.fixture
+def input_dir(request):
+    return request.config.getoption('--input-dir')
+
+
+@pytest.fixture
+def output_dir(request):
+    return request.config.getoption('--output-dir')
+
+
 def pytest_addoption(parser):
     parser.addoption(
         '--input-dir',
@@ -23,13 +33,3 @@ def pytest_addoption(parser):
         default=None,
         help='the directory where the OME TIFFs will be written'
     )
-
-
-@pytest.fixture
-def input_dir(request):
-    return request.config.getoption('--input-dir')
-
-
-@pytest.fixture
-def output_dir(request):
-    return request.config.getoption('--output-dir')
