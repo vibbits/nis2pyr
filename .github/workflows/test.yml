@@ -1,7 +1,12 @@
 name: Test
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+    workflow_dispatch:
 
 jobs:
   test:
