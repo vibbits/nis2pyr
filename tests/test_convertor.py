@@ -1,4 +1,5 @@
 import os
+import ome_types
 from pathlib import Path
 from tifffile import TiffFile, TIFF
 from nis2pyr.convertor import convert_nd2_to_pyramidal_ome_tiff
@@ -11,8 +12,8 @@ DEFAULT_PYRAMID_LEVELS = 6
 
 # Conversion of n-dimensional image coordinates to the OME TIFF page number.
 # This is still tentative and needs more extensive testing.
-def page_index(t: int, p: int, z: int, c: int,
-               numt: int, _: int, numz: int, numc: int) -> int:
+def _page_index(t: int, p: int, z: int, c: int,
+                numt: int, _: int, numz: int, numc: int) -> int:
     return c + numc * (z + numz * (t + numt * p))
 
 
@@ -59,6 +60,21 @@ def test_convert(input_dir, output_dir, any_nd2):
         numt, nump, numz, numc, _, _, _ = nd2_truth['shape']
         for coords, intensity in nd2_truth['pixels']:
             t, p, z, c, _, y, x = coords
-            idx = page_index(t, p, z, c, numt, nump, numz, numc)
+            idx = _page_index(t, p, z, c, numt, nump, numz, numc)
             image = tif.pages[idx].asarray()
             assert image[y, x] == intensity
+
+        # Check OME metadata
+        ome = ome_types.from_xml(tif.ome_metadata)
+        assert len(ome.images) == nump
+        for p in range(nump):
+            ome_channels = ome.images[p].pixels.channels
+            assert len(ome_channels) == numc
+            for c in range(numc):
+                nd2_channels = nd2_truth['channels']
+                if nd2_channels is None:
+                    assert ome_channels[c].name is None
+                else:
+                    assert ome_channels[c].name == nd2_channels[c][0]
+                    assert ome_channels[c].color.as_rgb_tuple() == \
+                           nd2_channels[c][1]
