@@ -5,17 +5,17 @@ from truth import TRUTH
 ALL = list(TRUTH.keys())
 
 
-@pytest.fixture(params=ALL)
+@pytest.fixture(params=ALL, scope="session")
 def any_nd2(request):
     return request.param
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def input_dir(request):
     return request.config.getoption('--input-dir')
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def output_dir(request):
     return request.config.getoption('--output-dir')
 
