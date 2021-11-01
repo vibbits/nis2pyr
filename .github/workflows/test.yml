@@ -34,5 +34,5 @@ jobs:
       - name: Download test images
         run: python scripts/download_testimages.py tests/data
 
-      - name: Test
-        run: pytest -v --input-dir=tests/data --output-dir=tests/data
+      - name: Test + analyze code coverage
+        run: pytest -v --cov=nis2pyr --cov-report term --input-dir=tests/data --output-dir=tests/data
