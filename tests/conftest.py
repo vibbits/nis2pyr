@@ -5,6 +5,11 @@ from truth import TRUTH
 ALL = list(TRUTH.keys())
 
 
+@pytest.fixture(scope="session")
+def easy_nd2():
+    return 'BF007.nd2'
+
+
 @pytest.fixture(params=ALL, scope="session")
 def any_nd2(request):
     return request.param
