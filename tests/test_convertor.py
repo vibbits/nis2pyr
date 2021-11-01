@@ -64,8 +64,8 @@ def test_pixels(tiff, nd2_truth):
         assert image[y, x] == intensity
 
 
-def test_metadata(tiff, nd2_truth):
-    # Check OME metadata
+def test_channels_info(tiff, nd2_truth):
+    # Check OME channel names and colors
     _, nump, _, numc, _, _, _ = nd2_truth['shape']
     ome = ome_types.from_xml(tiff.ome_metadata)
     assert len(ome.images) == nump
