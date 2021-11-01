@@ -11,6 +11,18 @@ def any_nd2(request):
 
 
 @pytest.fixture(scope="session")
+def nd2_truth(any_nd2):
+    filename = any_nd2
+    return TRUTH[filename]['nd2']
+
+
+@pytest.fixture(scope="session")
+def tiff_truth(any_nd2):
+    filename = any_nd2
+    return TRUTH[filename]['tiff']
+
+
+@pytest.fixture(scope="session")
 def input_dir(request):
     return request.config.getoption('--input-dir')
 
