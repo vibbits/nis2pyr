@@ -4,6 +4,7 @@
 [![PyPI](https://img.shields.io/pypi/v/nis2pyr.svg?color=green)](https://pypi.org/project/nis2pyr)
 [![Python Version](https://img.shields.io/pypi/pyversions/nis2pyr.svg?color=green)](https://python.org)
 [![Test](https://github.com/vibbits/nis2pyr/actions/workflows/test.yml/badge.svg)](https://github.com/vibbits/nis2pyr/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/vibbits/nis2pyr/branch/main/graph/badge.svg?token=Q73CFI8FEH)](https://codecov.io/gh/vibbits/nis2pyr)
 
 The `nis2pyr` utility converts [Nikon](https://www.microscope.healthcare.nikon.com/products/software/nis-elements) .nd2 files to tiled pyramidal [OME](https://www.openmicroscopy.org/) TIFF files. These TIFF files can then be opened in [QuPath](https://qupath.github.io/) for interactive viewing.
 
