@@ -6,16 +6,18 @@
 [![Test](https://github.com/vibbits/nis2pyr/actions/workflows/test.yml/badge.svg)](https://github.com/vibbits/nis2pyr/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/vibbits/nis2pyr/branch/main/graph/badge.svg?token=Q73CFI8FEH)](https://codecov.io/gh/vibbits/nis2pyr)
 
-The `nis2pyr` utility converts [Nikon](https://www.microscope.healthcare.nikon.com/products/software/nis-elements) .nd2 files to tiled pyramidal [OME](https://www.openmicroscopy.org/) TIFF files. These TIFF files can then be opened in [QuPath](https://qupath.github.io/) for interactive viewing.
+The `nis2pyr` utility converts [Nikon](https://www.microscope.healthcare.nikon.com/products/software/nis-elements) .nd2 files to tiled pyramidal [OME](https://www.openmicroscopy.org/) TIFF files.
 
 ## System Requirements
 
 nis2pyr was tested on these platforms:
 
 - Windows 10
+- Windows Server 2019
 - Ubuntu 18.04
-
-It is however expected to run on a wider range of systems.
+- Ubuntu 20.04
+- macOS 10.15
+- macOS 11
 
 ## Installation
 
@@ -85,6 +87,7 @@ optional arguments:
 
 Known limitations of the current version of `nis2pyr`:
 
-- ND2 files with [multiple z-planes](https://github.com/vibbits/nis2pyr/issues/1) are not supported.
-- ND2 files with [multiple timepoints](https://github.com/vibbits/nis2pyr/issues/5) are not supported.
 - ND2 metadata is lost, except for pixel size and channel names and colors.
+- ND2 files with [multiple z-planes](https://github.com/vibbits/nis2pyr/issues/1) are currently being tested.
+- ND2 files with [multiple timepoints](https://github.com/vibbits/nis2pyr/issues/5) are currently being tested.
+
