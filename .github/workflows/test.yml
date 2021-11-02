@@ -36,3 +36,6 @@ jobs:
 
       - name: Test + analyze code coverage
         run: pytest -v --cov=nis2pyr --cov-report term --cov-report=xml --input-dir=tests/data --output-dir=tests/data
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
