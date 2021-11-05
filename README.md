@@ -88,6 +88,3 @@ optional arguments:
 Known limitations of the current version of `nis2pyr`:
 
 - ND2 metadata is lost, except for pixel size and channel names and colors.
-- ND2 files with [multiple z-planes](https://github.com/vibbits/nis2pyr/issues/1) are currently being tested.
-- ND2 files with [multiple timepoints](https://github.com/vibbits/nis2pyr/issues/5) are currently being tested.
-
