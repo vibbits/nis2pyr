@@ -4,7 +4,7 @@ URL_PREFIX = 'https://downloads.openmicroscopy.org/images/ND2/'
 
 IMAGES = ['maxime/BF007.nd2',
           'karl/sample_image.nd2',
-          # 'aryeh/qa-9507/control003.nd2',
+          'aryeh/qa-9507/control003.nd2',
           # 'aryeh/MeOh_high_fluo_011.nd2',
           'aryeh/MeOh_high_fluo_007.nd2',
           # 'aryeh/MeOh_high_fluo_003.nd2',
