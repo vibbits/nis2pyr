@@ -54,7 +54,7 @@ def ome_set_channels_info(ome_filename: str,
             channel = ome.images[p].pixels.channels[i]
             channel.name = name
             channel.color = ome_types.model.simple_types.Color(color)
-            ome.images[0].pixels.channels[i] = channel
+            ome.images[p].pixels.channels[i] = channel
 
     # Write back OME tags to the TIFF file.
     ome_xml = ome.to_xml()
