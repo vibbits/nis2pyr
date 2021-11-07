@@ -9,11 +9,11 @@ def get_info(nd2_filename: str) -> Dict[str, Any]:
     with nd2.ND2File(nd2_filename) as nd2file:
         dims = nd2file.sizes
         axes = ''.join(dims.keys())
-        rgb = nd2file.is_rgb
         datatype = str(nd2file.dtype)
         info = {'axes': axes,
                 'dims': dims,
-                'rgb': rgb,
+                'rgb': nd2file.is_rgb,
+                'legacy': nd2file.is_legacy,
                 'datatype': datatype,
                 'filename': nd2_filename,
                 'voxelsize': nd2file.voxel_size(),
