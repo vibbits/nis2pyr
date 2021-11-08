@@ -1,5 +1,14 @@
 import pytest
+
+# Import ground truth of public testfiles.
 from truth import TRUTH
+
+# Import ground truth of additional non-public testfiles, if present.
+try:
+    from truth_private import TRUTH_PRIVATE
+    TRUTH.update(TRUTH_PRIVATE)
+except ImportError:
+    pass
 
 # Collect the filenames of all ND2 test images
 ALL = list(TRUTH.keys())
