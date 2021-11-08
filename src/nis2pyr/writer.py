@@ -37,10 +37,10 @@ def write_pyramidal_ome_tiff(nd2file: nd2.ND2File,
 
     is_rgb = nd2file.is_rgb
     if is_rgb:
-        # image axes: PTZ1YXS
+        # image axes: TPZ1YXS
         _, num_positions, _, _, height, width, _ = image.shape
     else:
-        # image axes: PTZC1YX
+        # image axes: TPZC1YX
         _, num_positions, _, _, _, height, width = image.shape
 
     # Figure out the number of pyramid levels we will need
