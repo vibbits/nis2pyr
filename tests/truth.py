@@ -17,6 +17,7 @@ TRUTH = {
     'BF007.nd2':
     {'nd2': {'shape': (1, 1, 1, 1, 1, 156, 164),  # TPZC1YX
              'is_rgb': False,
+             'is_legacy': False,
              'dtype': 'uint16',
              'voxelsize': (0.158389678930686, 0.158389678930686, None),
              'channels': [('405/488/561/633nm', (0, 30, 255))],
@@ -29,6 +30,7 @@ TRUTH = {
     'MeOh_high_fluo_007.nd2':
     {'nd2': {'shape': (13, 1, 1, 1, 1, 600, 800),  # TPZC1YX
              'is_rgb': False,
+             'is_legacy': False,
              'dtype': 'uint16',
              'voxelsize': (0.37, 0.37, None),
              'channels': [('pdt-405', (255, 0, 0))],
@@ -43,6 +45,7 @@ TRUTH = {
     '130606_JCC719_003.nd2':
     {'nd2': {'shape': (20, 1, 8, 1, 1, 232, 304),  # TPZC1YX
              'is_rgb': False,
+             'is_legacy': False,
              'dtype': 'uint16',
              'voxelsize': (0.214990421455938, 0.214990421455938, 0.5),
              'channels': [('GFP', (28, 255, 0))],
@@ -59,6 +62,7 @@ TRUTH = {
     'b16_14_12.nd2':  # note: channel "40x1" is mostly but not all zeros
     {'nd2': {'shape': (50, 1, 1, 2, 1, 1024, 1280),  # TPZC1YX
              'is_rgb': False,
+             'is_legacy': True,
              'dtype': 'uint8',
              'voxelsize': (0.154798761609907, 0.154798761609907, None),
              'channels': None,
@@ -79,6 +83,7 @@ TRUTH = {
     'but3_cont200-1.nd2':
     {'nd2': {'shape': (1, 5, 1, 2, 1, 1040, 1392),  # TPZC1YX
              'is_rgb': False,
+             'is_legacy': True,
              'dtype': 'uint16',
              'voxelsize': (50.0, 50.0, None),
              'channels': None,
@@ -97,6 +102,7 @@ TRUTH = {
     'sample_image.nd2':
     {'nd2': {'shape': (1, 1, 21, 5, 1, 1019, 1019),  # TPZC1YX
              'is_rgb': False,
+             'is_legacy': False,
              'dtype': 'uint16',
              'voxelsize': (1.0153102411107793, 1.0153102411107793, 5.0),
              'channels': [('CSU far red RNA', (255, 255, 255)),
@@ -121,6 +127,7 @@ TRUTH = {
     'multipoint.nd2':
     {'nd2': {'shape': (11, 4, 5, 1, 1, 1040, 1392),  # TPZC1YX
              'is_rgb': False,
+             'is_legacy': True,
              'dtype': 'uint16',
              'voxelsize': (0.094731235788473, 0.094731235788473, 0.5),
              'channels': None,
@@ -144,6 +151,7 @@ TRUTH = {
     'control003.nd2':
     {'nd2': {'shape': (1, 10, 17, 3, 1, 1200, 1600),  # TPZC1YX
              'is_rgb': False,
+             'is_legacy': False,
              'dtype': 'uint16',
              'voxelsize': (0.12254901960784287, 0.12254901960784287, 0.2),
              'channels': [('dapi-uv', (111, 40, 255)),
