@@ -5,18 +5,18 @@ from typing import Tuple
 
 def read_nd2file(nd2file: nd2.ND2File) -> np.ndarray:
     print(f'ND2 dimensions: {nd2file.sizes}; RGB: {nd2file.is_rgb}; '
-          f'datatype: {nd2file.dtype}')
+          f'datatype: {nd2file.dtype}; legacy: {nd2file.is_legacy}')
 
     axes = ''.join(nd2file.sizes.keys())
 
     image = nd2file.asarray()
 
-    # Reshape image to be of shape (num p, num t, num z, num channels, 1, height, width)
-    # for non-RGB, or (num p, num t, num z, 1, height, width, num components) for RGB.
+    # Reshape image to be of shape (num t, num p, num z, num channels, 1, height, width)
+    # for non-RGB, or (num t, num p, num z, 1, height, width, num components) for RGB.
     # This is needed because the precise shape influences how TiffWriter (in writer.py) will
     # store the channels, and we want storage to be similar to what Bioformat's
     # bfconvert produces since that format plays well with for example QuPath.
-    return _reshape_to_7d(image, axes, nd2file.is_rgb)
+    return _reshape_to_7d(image, axes, nd2file.is_rgb, nd2file.is_legacy)
 
 
 def _determine_7d_dimensions(image: np.ndarray, axes: str) -> Tuple[int, int,
@@ -43,7 +43,8 @@ def _determine_7d_dimensions(image: np.ndarray, axes: str) -> Tuple[int, int,
 
 def _reshape_to_7d(image: np.ndarray,
                    axes: str,
-                   is_rgb: bool) -> np.ndarray:
+                   is_rgb: bool,
+                   is_legacy: bool) -> np.ndarray:
 
     t, p, z, c, y, x, s = _determine_7d_dimensions(image, axes)
 
@@ -61,7 +62,12 @@ def _reshape_to_7d(image: np.ndarray,
         # Note that the 'S' dimension, if it occurs,
         # is always the last dimension.
         image = image.reshape(t, p, z, 1, y, x, s)
-        if is_rgb:
+        if is_rgb and not is_legacy:
+            # Old ND2 RGB files (which use JPEG2000) have channels stored
+            # in R, G, B order and do not need changing. Newer ND2 RGB files
+            # however store RGB color values in B, G, R order. For those files
+            # we swap the R and B channels so they are also interpreted
+            # correctly as RGB.
             print('Swapping RGB channels')
             image = _reorder_bgr_channels_to_rgb(image)
         return image

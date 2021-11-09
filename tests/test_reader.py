@@ -18,7 +18,8 @@ def test_metadata(nd, nd2_truth):
     assert nd.is_rgb == nd2_truth['is_rgb']
     assert nd.is_legacy == nd2_truth['is_legacy']
     assert get_nd2_voxelsize_um(nd) == nd2_truth['voxelsize']
-    assert get_nd2_channels_info(nd) == nd2_truth['channels']
+    if not nd.is_rgb:
+        assert get_nd2_channels_info(nd) == nd2_truth['channels']
 
 
 # Test which compares specific pixel values in the image read with the nd2

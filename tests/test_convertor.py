@@ -28,18 +28,13 @@ def tiff(input_dir, output_dir, any_nd2):
     yield TiffFile(pyramid_filename)
 
 
-def test_not_rgb(nd2_truth):
-    # For now the test code below only supports non-RGB images
-    assert not nd2_truth['is_rgb']
-
-
 def test_basic(tiff):
     assert tiff.is_ome
     assert tiff.is_bigtiff
 
 
 def test_pages(tiff, tiff_truth):
-    assert len(tiff.pages) == tiff_truth['pages']        
+    assert len(tiff.pages) == tiff_truth['pages']
     for page in tiff.pages:
         assert page.tilewidth == DEFAULT_TILE_SIZE
         assert page.tilelength == DEFAULT_TILE_SIZE
@@ -55,35 +50,62 @@ def test_series(tiff, tiff_truth):
 
 
 def test_pixels(tiff, nd2_truth):
+    if nd2_truth['is_rgb']:
+        numt, _, numz, _, _, _, numc = nd2_truth['shape']
+    else:
+        numt, _, numz, numc, _, _, _ = nd2_truth['shape']
+
     # Check pixel values
-    numt, nump, numz, numc, _, _, _ = nd2_truth['shape']
     for coords, intensity in nd2_truth['pixels']:
-        t, p, z, c, _, y, x = coords
-        idx = _page_index(t, p, z, c, numt, nump, numz, numc)
-        image = tiff.pages[idx].asarray()
-        assert image[y, x] == intensity
+        if nd2_truth['is_rgb']:
+            t, p, z, _, y, x, c = coords
+            idx = _page_index_rgb(t, p, z, numt, numz)
+            image = tiff.pages[idx].asarray()
+            assert image[y, x, c] == intensity
+        else:
+            t, p, z, c, _, y, x = coords
+            idx = _page_index_nonrgb(t, p, z, c, numt, numz, numc)
+            image = tiff.pages[idx].asarray()
+            assert image[y, x] == intensity
 
 
 def test_channels_info(tiff, nd2_truth):
+    if nd2_truth['is_rgb']:
+        _, nump, _, _, _, _, numc = nd2_truth['shape']
+    else:
+        _, nump, _, numc, _, _, _ = nd2_truth['shape']
+
     # Check OME channel names and colors
-    _, nump, _, numc, _, _, _ = nd2_truth['shape']
     ome = ome_types.from_xml(tiff.ome_metadata)
     assert len(ome.images) == nump
     for p in range(nump):
         ome_channels = ome.images[p].pixels.channels
-        assert len(ome_channels) == numc
-        for c in range(numc):
-            nd2_channels = nd2_truth['channels']
-            if nd2_channels is None:
-                assert ome_channels[c].name is None
-            else:
-                assert ome_channels[c].name == nd2_channels[c][0]
-                assert ome_channels[c].color.as_rgb_tuple() == \
-                       nd2_channels[c][1]
+        if nd2_truth['is_rgb']:
+            assert len(ome_channels) == 1
+            assert ome_channels[0].samples_per_pixel == 3
+        else:
+            assert len(ome_channels) == numc
+            for c in range(numc):
+                nd2_channels = nd2_truth['channels']
+                if nd2_channels is None:
+                    assert ome_channels[c].name is None
+                else:
+                    assert ome_channels[c].name == nd2_channels[c][0]
+                    assert ome_channels[c].color.as_rgb_tuple() == \
+                        nd2_channels[c][1]
 
 
 # Conversion of n-dimensional image coordinates to the OME TIFF page number.
-# This is still tentative and needs more extensive testing.
-def _page_index(t: int, p: int, z: int, c: int,
-                numt: int, _: int, numz: int, numc: int) -> int:
+# In the non-RGB case, the pixels for each channel are stored in a separate page.
+# In the RGB case on the other hand, the R, G and B "channels" are seen as 
+# 3 components of one channel, and all 3 components are stored pixel-interleaved
+# in the same TIFF page.
+
+def _page_index_nonrgb(t: int, p: int, z: int, c: int,
+                       numt: int, numz: int, numc: int) -> int:
     return c + numc * (z + numz * (t + numt * p))
+
+
+def _page_index_rgb(t: int, p: int, z: int,
+                    numt: int, numz: int) -> int:
+    return z + numz * (t + numt * p)

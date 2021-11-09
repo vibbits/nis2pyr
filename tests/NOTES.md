@@ -1,6 +1,6 @@
 # Notes concerning the test files
 
-## Test file control003.nd2
+## Test file "control003.nd2"
 
 Detailed analysis of the test file
 [control003.nd2](https://downloads.openmicroscopy.org/images/ND2/aryeh/qa-9507/control003.nd2),
@@ -90,3 +90,55 @@ When converting control003.nd2 to OME TIFF using Nikon's "ND2 to OMETIFF Convert
 however again has an empty "dapi-uv" channel, except for z=9 (corresponding to z=0.0 um).
 It seems that this tool does not implement the undocumented feature that NIS-Elements
 uses to come up with the duplicated image data for the "dapi-uv" channel in the other Z-planes.
+
+## Test file "Time%20sequence%2024.nd2"
+
+RGB image time series, 8 bits/component. Old JPEG2000 based ND2 file format (file magic bytes `00 00 00 0C`).
+
+In NIS-Elements Viewer the images look blue, with the red component zero.
+
+The ND2 file can actually be opened in Gimp as well, since it's a JPEG2000 file. Gimp seems to read only the first "page" (t=0), and also renders it blue (R=0).
+
+The ND2 library also returns the components in R, G, B order. So there is no need to swap color components.
+
+## Test file "Slide2-17-1_ChannelBrightfield_Seq0079.nd2" (private test file)
+
+RGB image, 8 bits/component. New ND2 file format (file magic bytes `DA CE BE 0A`).
+
+In Nis-Elements viewer we measure the following RGB values:
+
+```text
+             (red, green, blue)
+x=63238, y=0: (192, 191, 166) = hex (C0, BF, A6)
+x=63239, y=0: (191, 190, 164) = hex (BF, BE, A4)
+x=63240, y=0: (191, 189, 164) = hex (BF, BD, A4)
+x=63241, y=0: (192, 190, 166) = hex (C0, BE, A6)
+x=63242, y=0: (192, 190, 166) = hex (C0, BE, A6)
+x=63243, y=0: (191, 190, 166) = hex (BF, BE, A6)
+x=63244, y=0: (191, 190, 166) = hex (BF, BE, A6)
+x=63245, y=0: (190, 190, 166) = hex (BE, BE, A6)
+x=63246, y=0: (189, 189, 164) = hex (BD, BD, A4)
+```
+
+If we search the ND2 file for these color values in R, G, B order:
+
+```text
+C0 BF A6 BF BE A4 BF BD A4 C0 BE A6 C0 BE A6 BF BE A6 BF BE A6 BE BE A6 BD BD A4
+```
+
+this search string is not found.
+
+If however we search for the string in B, G, R order:
+
+```text
+A6 BF C0 A4 BE BF A4 BD BF A6 BE C0 A6 BE C0 A6 BE BF A6 BE BF A6 BE BE A4 BD BD
+```
+
+we find this sequence of color values in the .nd2 file at file offset 0x3E512.
+
+This indicates that (at least in this file, and we suspect for all new file format RGB ND2 files) 
+RGB color components are stored in BGR order: B G R B G R B G R ... for successive pixels.
+
+This order is also what the ND2 library returns. When converting the ND2 file to
+OME TIFF, we will swap the R and B components to the usual RGB order, since that is
+also what consumers of the OME TIFF RGB file expect.
