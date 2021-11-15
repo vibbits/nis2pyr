@@ -7,6 +7,7 @@ from typing import Optional, Tuple
 
 from nis2pyr.metadata import update_channels_info, get_ome_voxelsize
 from nis2pyr.reader import read_nd2file
+from nis2pyr import __version__
 
 
 def write_pyramidal_ome_tiff(nd2file: nd2.ND2File,
@@ -42,7 +43,10 @@ def write_pyramidal_ome_tiff(nd2file: nd2.ND2File,
     image_size: Tuple[int, int] = (width, height)
     num_levels: int = min(_num_pyramid_levels(image_size), max_levels)
 
-    ome_metadata = get_ome_voxelsize(nd2file)
+    # Collect OME metadata
+    ome_metadata = {}
+    ome_metadata['Creator'] = _creator()
+    ome_metadata.update(get_ome_voxelsize(nd2file))
 
     photometric, planarconfig = _determine_storage_parameters(is_rgb)
 
@@ -50,7 +54,8 @@ def write_pyramidal_ome_tiff(nd2file: nd2.ND2File,
                    photometric=photometric,
                    planarconfig=planarconfig,
                    compression=compression,
-                   metadata=ome_metadata)
+                   metadata=ome_metadata,
+                   software=_creator())
 
     _write_tiff_pyramid(image, pyramid_filename, num_positions, num_levels,
                         options)
@@ -88,6 +93,10 @@ def _write_tiff_pyramid(image: np.ndarray,
                 img = _downsample(img)
                 print(f'Writing level {level}: {_to_string(img.shape)}')
                 tif.write(img, subfiletype=1, **options)
+
+
+def _creator() -> str:
+    return f'nis2pyr v{__version__}'
 
 
 def _to_string(dims) -> str:
