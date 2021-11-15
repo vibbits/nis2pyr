@@ -32,22 +32,18 @@ def write_pyramidal_ome_tiff(nd2file: nd2.ND2File,
     print(f'Reading {nd2file.path}')
     image = read_nd2file(nd2file)
 
-    # The image MUST be of shape TPZC1YX (for non RGB) or TPZ1YXS (for RGB)
+    # The image MUST be of shape TPZCYXS (for both RGB and non-RGB)
     assert len(image.shape) == 7
+    _, num_positions, _, _, height, width, _ = image.shape
 
     is_rgb = nd2file.is_rgb
-    if is_rgb:
-        # image axes: TPZ1YXS
-        _, num_positions, _, _, height, width, _ = image.shape
-    else:
-        # image axes: TPZC1YX
-        _, num_positions, _, _, _, height, width = image.shape
 
     # Figure out the number of pyramid levels we will need
     image_size: Tuple[int, int] = (width, height)
     num_levels: int = min(_num_pyramid_levels(image_size), max_levels)
 
     ome_metadata = get_ome_voxelsize(nd2file)
+
     photometric, planarconfig = _determine_storage_parameters(is_rgb)
 
     options = dict(tile=(tile_size, tile_size),
@@ -57,7 +53,7 @@ def write_pyramidal_ome_tiff(nd2file: nd2.ND2File,
                    metadata=ome_metadata)
 
     _write_tiff_pyramid(image, pyramid_filename, num_positions, num_levels,
-                        is_rgb, options)
+                        options)
 
     # Update OME channel names and colors info.
     # This is not needed for RGB images, as they
@@ -70,7 +66,6 @@ def _write_tiff_pyramid(image: np.ndarray,
                         pyramid_filename: str,
                         num_positions: int,
                         num_levels: int,
-                        is_rgb: bool,
                         options) -> None:
     print(f'Saving pyramidal OME TIFF file {pyramid_filename}')
     with tifffile.TiffWriter(pyramid_filename, ome=True, bigtiff=True) as tif:
@@ -85,22 +80,19 @@ def _write_tiff_pyramid(image: np.ndarray,
                 print(f'Position {p}')
 
             # Write full resolution image
-            print(f'Writing level 0: {_to_string(img.shape, is_rgb)}')
+            print(f'Writing level 0: {_to_string(img.shape)}')
             tif.write(img, subifds=num_levels-1, **options)
 
             # Save downsampled pyramid images to the subifds
             for level in range(1, num_levels):
-                img = _downsample(img, is_rgb)
-                print(f'Writing level {level}: {_to_string(img.shape, is_rgb)}')
+                img = _downsample(img)
+                print(f'Writing level {level}: {_to_string(img.shape)}')
                 tif.write(img, subfiletype=1, **options)
 
 
-def _to_string(dims, is_rgb: bool) -> str:
+def _to_string(dims) -> str:
     assert len(dims) == 6
-    if is_rgb:
-        return f'TZ1YXS={dims}'
-    else:
-        return f'TZC1YX={dims}'
+    return f'TZCYXS={dims}'
 
 
 def _determine_storage_parameters(is_rgb_image: bool):
@@ -109,21 +101,17 @@ def _determine_storage_parameters(is_rgb_image: bool):
         planarconfig = None
     else:
         photometric = 'minisblack'
-        planarconfig = 'separate'
+        planarconfig = 'contig'
     return photometric, planarconfig
 
 
-def _downsample(image: np.ndarray, is_rgb: bool) -> np.ndarray:
+def _downsample(image: np.ndarray) -> np.ndarray:
     # For now use numpy ::2 for (nearest neighbor) downsampling, but later
     # replace it with repeated cv2.pyrDown() for higher quality downsampling.
-    # (pyrDown() cannot handle multiple z or t.)
+    # (pyrDown() cannot handle multiple z or t though)
     assert len(image.shape) == 6
-    if is_rgb:
-        # image is of shape TZ1YXS
-        return image[:, :, :, ::2, ::2, :]
-    else:
-        # image is of shape TZC1YX
-        return image[:, :, :, :, ::2, ::2]
+    # image is of shape TZCYXS
+    return image[:, :, :, ::2, ::2, :]
 
 
 def _num_pyramid_levels(image_size: Tuple[int, int]) -> int:
