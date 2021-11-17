@@ -6,11 +6,11 @@
 [![Test](https://github.com/vibbits/nis2pyr/actions/workflows/test.yml/badge.svg)](https://github.com/vibbits/nis2pyr/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/vibbits/nis2pyr/branch/main/graph/badge.svg?token=Q73CFI8FEH)](https://codecov.io/gh/vibbits/nis2pyr)
 
-The `nis2pyr` utility converts [Nikon](https://www.microscope.healthcare.nikon.com/products/software/nis-elements) .nd2 files to tiled pyramidal [OME](https://www.openmicroscopy.org/) TIFF files.
+nis2pyr converts [Nikon](https://www.microscope.healthcare.nikon.com/products/software/nis-elements) .nd2 files to tiled pyramidal [OME](https://www.openmicroscopy.org/) TIFF files. The conversion is straightforward and can be performed via the `nis2pyr` command line tool, or via a simple one-liner in Python using the nis2pyr package. 
 
 ## System Requirements
 
-nis2pyr was tested on these platforms:
+nis2pyr was [tested](https://github.com/vibbits/nis2pyr/actions/workflows/test.yml) on these platforms:
 
 - Windows 10
 - Windows Server 2019
