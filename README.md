@@ -52,18 +52,24 @@ nis2pyr input.nd2 pyramid.ome.tif
 It is also possible to specify the compression algorithm, number of pyramid levels and the tile size of the output pyramidal OME TIFF.
 
 ```text
-usage: nis2pyr [-h] [--version] [--compression COMPRESSION]
+usage: nis2pyr [-h] [--version] [--compression COMPRESSION] 
                [--pyramid-levels PYRAMID_LEVELS] [--tile-size TILE_SIZE]
-               nd2_filename [pyramid_filename]
+               input_file_pattern [pyramid_filename]
 
-Convert Nikon .nd2 image files to tiled pyramidal OME TIFF files.
+Convert Nikon ND2 image files to tiled pyramidal OME TIFF files.
 
 positional arguments:
-  nd2_filename          full filename of the input ND2 file
-  pyramid_filename      full filename of the resulting pyramidal OME TIFF file;
-                        if no pyramid filename is provided the pyramidal OME TIFF will be
-                        written to the same directory as the original ND2 and with
-                        the same filename but with an .ome.tif extension
+  input_file_pattern    either the filename of a single ND2 file that needs to 
+                        be converted, or a filename pattern ('glob') to convert 
+                        multiple files. This filename pattern can be used for
+                        example to convert all ND2 files in a given directory.
+  pyramid_filename      if only a single filename is specified as input file 
+                        pattern, pyramid_filename is the full filename of the
+                        resulting pyramidal OME TIFF file; if no pyramid filename
+                        is provided, or if multiple files are converted, the 
+                        pyramidal OME TIFF(s) will be written to the same directory 
+                        as the original ND2 and with the same filename but 
+                        with an .ome.tif extension
 
 optional arguments:
   -h, --help            show this help message and exit
